@@ -1,3 +1,6 @@
+import time
+
+
 def is_valid(board, row, col, num):
     # Check if the number is not in the current row and column
     if num in board[row] or num in [board[i][col] for i in range(9)]:
@@ -74,20 +77,25 @@ def backtrack_forward_check(board):
 
 # Example usage:
 sudoku_board = [
-    [5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+    [0, 0, 0, 0, 0, 0, 6, 8, 0],
+    [0, 0, 0, 0, 7, 3, 0, 0, 9],
+    [3, 0, 9, 0, 0, 0, 0, 4, 5],
+    [4, 9, 0, 0, 0, 0, 0, 0, 0],
+    [8, 0, 3, 0, 5, 0, 9, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 3, 6],
+    [9, 6, 0, 0, 0, 0, 3, 0, 8],
+    [7, 0, 0, 6, 8, 0, 0, 0, 0],
+    [0, 2, 8, 0, 0, 0, 0, 0, 0]
 ]
 
+start_time = time.time()  # Record the start time
 if backtrack_forward_check(sudoku_board):
     print("Solution found:")
     for row in sudoku_board:
         print(row)
 else:
     print("No solution exists.")
+end_time = time.time()  # Record the end time
+
+execution_time = end_time - start_time  # Calculate the total execution time
+print(f"Total execution time: {execution_time} seconds")
