@@ -98,7 +98,7 @@ sudoku_board9_9 = [
 # [5, 2, 8, 9, 3, 4, 1, 6, 7]
 
 
-sudoku_board_4x4 = [
+sudoku_board_4_4 = [
     [0, 4, 2, 0],
     [2, 0, 0, 3],
     [1, 0, 0, 4],
@@ -111,7 +111,7 @@ sudoku_board_4x4 = [
 # [4, 3, 1, 2]
 
 
-sudoku_board = sudoku_board_4x4
+sudoku_board = sudoku_board9_9
 sudoku_size = len(sudoku_board)
 
 start_time = time.time()  # Record the start time
