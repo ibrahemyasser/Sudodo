@@ -35,15 +35,14 @@ import time
 #                 grid[i][j] = 0  # Eliminate inconsistent value in the 3x3 box
 
 #     grid[row][col] = value  # Preserve the original value at (row, col)
+
+# def find_empty_cell(grid):
+#     for i in range(9):
+#         for j in range(9):
+#             if grid[i][j] == 0:
+#                 return (i, j)
+#     return None
 #########################################################
-
-
-def find_empty_cell(grid):
-    for i in range(9):
-        for j in range(9):
-            if grid[i][j] == 0:
-                return (i, j)
-    return None
 
 def is_safe(grid, row, col, num, size):
     return (
