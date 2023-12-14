@@ -1,0 +1,63 @@
+#Part 1
+
+
+Problem Formulation:
+The Sudoku-solving problem is formulated as a Constraint Satisfaction Problem (CSP). In CSP, we have a set of variables (empty cells) with possible values (1 to 9) and a set of constraints (each row, column, and 3x3 subgrid must contain unique values). 
+The goal is to find an assignment of values to variables that satisfies all constraints.
+
+
+Technical Discussion:
+
+The Sudoku problem can be formulated as a constraint satisfaction problem (CSP), which is a type of search problem. In a CSP, the goal is to find a solution that satisfies a set of constraints. In Sudoku, the constraints are straightforward: each row, column, and 3x3 subgrid must contain the numbers 1 through 9 without repetition.
+
+The algorithm employed in the provided code is a backtracking search algorithm. Backtracking is a systematic search strategy used to explore all possible solutions by iteratively trying different values for each variable (empty cell, in this case) and backtracking when a conflict is encountered.
+
+The Minimum Remaining Values (MRV) heuristic is used to prioritize the order in which empty cells are filled. This heuristic selects the empty cell with the fewest possible values, reducing the search space and improving efficiency. Additionally, the code employs a constraint propagation technique by sorting the possible values for each cell based on the number of constraints associated with each value. This helps in reducing the branching factor during the search.
+
+Discussion of Results:
+
+The backtracking algorithm successfully solves Sudoku puzzles by systematically exploring the solution space. The use of heuristics like MRV and constraint propagation helps to improve the efficiency of the search, especially for challenging puzzles. The algorithm is effective in finding a solution when it exists, and it gracefully backtracks when encountering conflicts, ensuring a comprehensive search.
+
+Results:
+
+Sample results from the provided code have been demonstrated with both solvable and unsolvable Sudoku puzzles. The code outputs the initial puzzle, attempts to solve it, and prints the solved puzzle or indicates if no solution exists.
+
+#Part 2
+
+Chosen Search Algorithm Explanation
+
+Chosen Search Algorithm: Backtracking with MRV Heuristic and Constraint Propagation
+
+Backtracking is a depth-first search algorithm that systematically explores all possibilities while efficiently pruning the search space. The MRV heuristic prioritizes the selection of empty cells with the fewest possible values, reducing the search space and improving efficiency. Additionally, constraint propagation is used to further narrow down the possible values for each empty cell.
+
+Example Application:
+
+The algorithm is applied by iteratively selecting an empty cell, determining its possible values, and choosing the value that satisfies the constraints. If conflicts arise during the search, the algorithm backtracks to explore alternative paths. The MRV heuristic guides the selection of the next empty cell, and constraint propagation influences the order of possible values to explore.
+
+Evaluation of the Chosen Algorithm:
+
+The backtracking algorithm with MRV heuristic and constraint propagation demonstrates good performance in solving Sudoku puzzles. The heuristic aids in selecting promising branches of the search space, and constraint propagation helps in reducing the number of possibilities to explore for each cell. However, the algorithm may still face challenges with highly complex puzzles or those designed to be ambiguous. Further optimizations, such as additional heuristics or parallelization, could be explored for enhancing performance in such scenarios. Overall, the chosen algorithm is effective for a broad range of Sudoku puzzles, providing a balance between completeness and efficiency.
+
+Completeness:
+
+The algorithm is complete because it explores the entire search space, systematically trying different values for each empty cell until a solution is found. The backtracking mechanism ensures that the algorithm explores all possible paths, and it will backtrack when it encounters conflicts, ensuring that it covers the entire solution space.
+
+Optimality:
+
+The algorithm is not necessarily optimal in terms of time complexity. Sudoku, as a general problem, is NP-complete, meaning there is no known polynomial-time algorithm to solve all instances of Sudoku. The time complexity of the provided backtracking algorithm is influenced by the puzzle's difficulty and the specific path chosen during the search.
+
+The heuristics used in the algorithm, such as the Minimum Remaining Values (MRV) heuristic and constraint propagation, improve efficiency by guiding the search toward promising branches. However, the worst-case time complexity is still exponential, and the algorithm may take a long time to solve particularly difficult puzzles.
+
+In practice, the algorithm performs well on typical Sudoku puzzles encountered in newspapers or puzzle books. It efficiently solves many puzzles, but it might struggle with puzzles designed to be particularly challenging.
+
+Optimality can also be considered in terms of the algorithm's runtime for a specific puzzle. While the algorithm is complete and will eventually find a solution, the time it takes to do so can vary, and some puzzles may take longer to solve than others.
+
+Space Complexity:
+
+The space complexity of the algorithm is primarily determined by the recursion stack during the backtracking process. In the worst case, the recursion stack can reach a depth of 81 (9x9 Sudoku grid), as each empty cell is explored. Additionally, the algorithm uses auxiliary data structures like sets to store possible values and constraints for each cell. The space required by these data structures is proportional to the size of the Sudoku grid, resulting in O(N^2) space complexity, where N is the grid size (9 in this case).
+
+Time Complexity:
+
+The time complexity of the backtracking algorithm is challenging to precisely quantify due to variations in puzzle difficulty. However, in the worst case, the algorithm explores all possibilities in the search space. The time complexity is exponential but is often significantly reduced by heuristics like Minimum Remaining Values (MRV) and constraint propagation. The MRV heuristic and constraint propagation help in pruning the search space, making the algorithm more efficient in practice. The time complexity can be considered roughly O(b^d), where b is the branching factor (average number of possibilities for each empty cell) and d is the depth of the recursion stack.
+
+In summary, the algorithm's space complexity is O(N^2), and the time complexity is influenced by the branching factor and the depth of the search space, with heuristics helping to mitigate the worst-case exponential behavior.
