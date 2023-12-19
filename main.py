@@ -1,5 +1,4 @@
-
-
+from AC import enforce_arc_consistency
 
 class SudokuCSP:
     size = 0 # size of the grid
@@ -83,9 +82,6 @@ def backtrack(csp):
             csp.set_grid_value(row, col, 0) 
     return None
 
-
-
-
 sudoku_board9_9 = [
     [0, 0, 0, 0, 0, 0, 6, 8, 0],
     [0, 0, 0, 0, 7, 3, 0, 0, 9],
@@ -98,16 +94,18 @@ sudoku_board9_9 = [
     [0, 2, 8, 0, 0, 0, 0, 0, 0]
 ]
 
+
 def main():
     #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
     #csmWithMRV_CP = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = enforce_arc_consistency)
     #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
     #cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
-    #cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    csp = SudokuCSP(sudoku_board9_9)
-    backtrack(csp)
-    print(csp.grid)
+    cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
+    backtrack(cspWithCP)
+    print(cspWithCP.grid)
+    # csp = SudokuCSP(sudoku_board9_9)
     # todo compare performance of different algorithms
     return None
 
-main()
+if __name__ == "__main__":
+    main()

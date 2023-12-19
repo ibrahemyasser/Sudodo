@@ -1,6 +1,5 @@
 import time
 
-
 def is_safe(grid, row, col, num, size):
     return (
         not used_in_row(grid, row, num) and
@@ -18,15 +17,16 @@ def used_in_box(grid, start_row, start_col, num, size):
     return any(num in grid[i][start_col:start_col + int(size**0.5)] for i in range(start_row, start_row + int(size**0.5)))
 
 def enforce_arc_consistency(grid, size):
+    temp_grid = grid
     for i in range(size):
         for j in range(size):
-            if grid[i][j] == 0:
+            if temp_grid[i][j] == 0:
                 for value in range(1, size + 1):
-                    if is_safe(grid, i, j, value, size):
-                        grid[i][j] = value
-                        if enforce_arc_consistency(grid, size):
+                    if is_safe(temp_grid, i, j, value, size):
+                        temp_grid[i][j] = value
+                        if enforce_arc_consistency(temp_grid, size):
                             return True
-                        grid[i][j] = 0
+                        temp_grid[i][j] = 0
                 return False
     return True
 
@@ -67,17 +67,17 @@ sudoku_board_4_4 = [
 # [4, 3, 1, 2]
 
 
-sudoku_board = sudoku_board9_9
-sudoku_size = len(sudoku_board)
+# sudoku_board = sudoku_board9_9
+# sudoku_size = len(sudoku_board)
 
-start_time = time.time()  # Record the start time
-if enforce_arc_consistency(sudoku_board,sudoku_size):
-    print("Solution found:")
-    for row in sudoku_board:
-        print(row)
-else:
-    print("No solution exists.")
-end_time = time.time()  # Record the end time
+# start_time = time.time()  # Record the start time
+# if enforce_arc_consistency(sudoku_board,sudoku_size):
+#     print("Solution found:")
+#     for row in sudoku_board:
+#         print(row)
+# else:
+#     print("No solution exists.")
+# end_time = time.time()  # Record the end time
 
-execution_time = end_time - start_time  # Calculate the total execution time
-print(f"Total execution time: {execution_time} seconds")
+# execution_time = end_time - start_time  # Calculate the total execution time
+# print(f"Total execution time: {execution_time} seconds")
