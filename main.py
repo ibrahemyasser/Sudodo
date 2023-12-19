@@ -1,5 +1,6 @@
 
 
+
 class SudokuCSP:
     size = 0 # size of the grid
     length = 0 # sqrt(size)
@@ -24,11 +25,11 @@ class SudokuCSP:
         # return sqrt(size)
          return int(len(grid) ** 0.5)
 
-    def used_in_row(grid, row, num):
-        return num in grid[row]
+    def used_in_row(self, row, num):
+        return num in self.grid[row]
 
     def used_in_col(self, col, num):
-        return num in [self.grid[i][col] for i in range(self)]
+        return num in [self.grid[i][col] for i in range(self.size)]
     
     def used_in_box(self, start_row, start_col, num, size):
         return any(num in self.grid[i][start_col:start_col + int(size**0.5)] for i in range(start_row, start_row + int(size**0.5)))
@@ -61,8 +62,6 @@ class SudokuCSP:
     def set_grid_value(self, row, col, value):
         self.grid[row][col] = value
 
-def order_domain_values(var, assignment, csp):
-    return csp.domains[var]
 
     
 def backtrack(csp):
@@ -70,10 +69,10 @@ def backtrack(csp):
     if empty_cell is None:
         return True
     [row, col] = empty_cell
-    for value in order_domain_values():
+    for value in csp.order_domain_values():
         if csp.is_assignment_consistent(row, col, value):
             csp.set_grid_value(row, col, value)
-            inferences = csp.inference(csp, empty_cell, value)
+            inferences = csp.inference(empty_cell, value)
             # if inferences is true we messed up and we need to backtrack
             if inferences:
                 csp.set_grid_value(row, col, 0)
@@ -83,7 +82,17 @@ def backtrack(csp):
     return None
 
 
-
+sudoku_board9_9 = [
+    [0, 0, 0, 0, 0, 0, 6, 8, 0],
+    [0, 0, 0, 0, 7, 3, 0, 0, 9],
+    [3, 0, 9, 0, 0, 0, 0, 4, 5],
+    [4, 9, 0, 0, 0, 0, 0, 0, 0],
+    [8, 0, 3, 0, 5, 0, 9, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 3, 6],
+    [9, 6, 0, 0, 0, 0, 3, 0, 8],
+    [7, 0, 0, 6, 8, 0, 0, 0, 0],
+    [0, 2, 8, 0, 0, 0, 0, 0, 0]
+]
 
 def main():
     #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
@@ -91,7 +100,11 @@ def main():
     #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
     #cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
     #cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    #csp = SudokuCSP(sudoku_board9_9)
+    csp = SudokuCSP(sudoku_board9_9)
+    backtrack(csp)
+    print(csp.grid)
     # todo compare performance of different algorithms
     return None
 
+
+main()
