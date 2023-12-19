@@ -55,9 +55,9 @@ class SudokuCSP:
         return range(1, self.size + 1)
     # var is a tuple (row, col)
     # return true if incosistency is found otherwise false
-    def inference(self, var, value):
+    def inference(self):
         if self._inference is not None:
-            return self._inference(self, var, value)
+            return self._inference(self.grid)
         return False
     def set_grid_value(self, row, col, value):
         self.grid[row][col] = value
@@ -72,14 +72,18 @@ def backtrack(csp):
     for value in csp.order_domain_values():
         if csp.is_assignment_consistent(row, col, value):
             csp.set_grid_value(row, col, value)
-            inferences = csp.inference(empty_cell, value)
+            inferences = csp.inference()
             # if inferences is true we messed up and we need to backtrack
             if inferences:
                 csp.set_grid_value(row, col, 0)
                 continue
-            if backtrack(csp):
+            res = backtrack(csp)
+            if res:
                 return True
+            csp.set_grid_value(row, col, 0) 
     return None
+
+
 
 
 sudoku_board9_9 = [
@@ -105,6 +109,5 @@ def main():
     print(csp.grid)
     # todo compare performance of different algorithms
     return None
-
 
 main()
