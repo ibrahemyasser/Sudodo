@@ -1,5 +1,11 @@
+import time
 from AC import enforce_arc_consistency
 from forward_checking import forward_check
+from sudoku import Sudoku
+from prettytable import PrettyTable
+
+
+
 class SudokuCSP:
     size = 0 # size of the grid
     length = 0 # sqrt(size)
@@ -98,16 +104,59 @@ def print_grid(grid):
     for row in grid:
         print(row)
 
+def replace_none_with_zero(grid):
+    for i in range(len(grid)):
+        for j in range(len(grid)):
+            if grid[i][j] is None:
+                grid[i][j] = 0
+    return grid
+
 def main():
+
     #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
     #csmWithMRV_CP = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = enforce_arc_consistency)
     #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
-    cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
-    cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    backtrack(cspWithCP)
-    print_grid(cspWithCP.grid)
-    # csp = SudokuCSP(sudoku_board9_9)
-    # todo compare performance of different algorithms
+
+    # cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
+    # print_grid(cspWithForwardCheck.grid)
+    # cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
+    # Record start time
+    # start_time = time.time()
+    # csp = SudokuCSP(replace_none_with_zero(puzzle.board))
+    # backtrack(csp)
+    # print_grid(csp.grid)
+    # # Record end time
+    # end_time = time.time()
+    # # Calculate elapsed time
+    # elapsed_time = end_time - start_time
+    # print(f"My function took {elapsed_time} seconds to execute.")
+
+    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 4)]
+    print("Sudoku puzzles with different sizes")
+    for i in puzzles:
+        print("---------------------------")
+        print("Size: ", len(i))
+        print_grid(i)
+        print("---------------------------")
+    table = PrettyTable()
+    table.field_names = ["ID", "Algorithm", "Size", "Time"]
+    inference = [{"inference":None, "name": "None"},{ "inference":forward_check, "name": "Forward Checking"}, {"inference":enforce_arc_consistency, "name": "AC-3"}]
+    for i in inference:
+        for j in puzzles:
+            csp = SudokuCSP(j, inference = i['inference'])
+            start_time = time.time()
+            backtrack(csp)
+            print("---------------------------")
+            print("Soulution, Size: ", len(i))
+            print_grid(csp.grid)
+            print("---------------------------")
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            table.add_row([puzzles.index(j), i['name'], csp.size, elapsed_time])
+    print(table)
+
+    # backtrack(cspWithCP)
+    # print_grid("answer", cspWithCP.grid)
     return None
 
 if __name__ == "__main__":
