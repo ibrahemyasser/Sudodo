@@ -94,15 +94,18 @@ sudoku_board9_9 = [
     [0, 2, 8, 0, 0, 0, 0, 0, 0]
 ]
 
+def print_grid(grid):
+    for row in grid:
+        print(row)
 
 def main():
     #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
     #csmWithMRV_CP = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = enforce_arc_consistency)
     #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
     cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
-    # cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    backtrack(cspWithForwardCheck)
-    print(cspWithForwardCheck.grid)
+    cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
+    backtrack(cspWithCP)
+    print_grid(cspWithCP.grid)
     # csp = SudokuCSP(sudoku_board9_9)
     # todo compare performance of different algorithms
     return None
