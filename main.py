@@ -24,11 +24,11 @@ class SudokuCSP:
         # return sqrt(size)
          return int(len(grid) ** 0.5)
 
-    def used_in_row(grid, row, num):
-        return num in grid[row]
+    def used_in_row(self, row, num):
+        return num in self.grid[row]
 
     def used_in_col(self, col, num):
-        return num in [self.grid[i][col] for i in range(self)]
+        return num in [self.grid[i][col] for i in range(self.size)]
     
     def used_in_box(self, start_row, start_col, num, size):
         return any(num in self.grid[i][start_col:start_col + int(size**0.5)] for i in range(start_row, start_row + int(size**0.5)))
@@ -61,8 +61,6 @@ class SudokuCSP:
     def set_grid_value(self, row, col, value):
         self.grid[row][col] = value
 
-def order_domain_values(var, assignment, csp):
-    return csp.domains[var]
 
     
 def backtrack(csp):
@@ -70,10 +68,10 @@ def backtrack(csp):
     if empty_cell is None:
         return True
     [row, col] = empty_cell
-    for value in order_domain_values():
+    for value in csp.order_domain_values():
         if csp.is_assignment_consistent(row, col, value):
             csp.set_grid_value(row, col, value)
-            inferences = csp.inference(csp, empty_cell, value)
+            inferences = csp.inference(empty_cell, value)
             # if inferences is true we messed up and we need to backtrack
             if inferences:
                 csp.set_grid_value(row, col, 0)
