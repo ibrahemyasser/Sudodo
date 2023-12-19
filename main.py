@@ -1,5 +1,5 @@
 from AC import enforce_arc_consistency
-
+from forward_checking import forward_check
 class SudokuCSP:
     size = 0 # size of the grid
     length = 0 # sqrt(size)
@@ -99,10 +99,10 @@ def main():
     #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
     #csmWithMRV_CP = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = enforce_arc_consistency)
     #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
-    #cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
-    cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    backtrack(cspWithCP)
-    print(cspWithCP.grid)
+    cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
+    # cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
+    backtrack(cspWithForwardCheck)
+    print(cspWithForwardCheck.grid)
     # csp = SudokuCSP(sudoku_board9_9)
     # todo compare performance of different algorithms
     return None
