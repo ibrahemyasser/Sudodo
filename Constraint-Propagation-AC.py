@@ -1,48 +1,5 @@
 import time
 
-#######################################
-# def solve_sudoku(grid):
-#     empty_cell = find_empty_cell(grid)
-    
-#     if not empty_cell:
-#         return True  # Puzzle solved
-    
-#     row, col = empty_cell
-    
-#     for num in range(1, 10):
-#         if is_safe(grid, row, col, num):
-#             grid[row][col] = num
-            
-#             if solve_sudoku(grid):
-#                 return True  # Move forward
-            
-#             grid[row][col] = 0  # Backtrack if no solution found
-    
-#     return False  # Trigger backtracking
-
-# def eliminate_inconsistent_values(grid, row, col, value):
-#     for i in range(9):
-#         if i != col and grid[row][i] == value:
-#             grid[row][i] = 0  # Eliminate inconsistent value in the row
-
-#         if i != row and grid[i][col] == value:
-#             grid[i][col] = 0  # Eliminate inconsistent value in the column
-
-#     box_start_row, box_start_col = 3 * (row // 3), 3 * (col // 3)
-#     for i in range(box_start_row, box_start_row + 3):
-#         for j in range(box_start_col, box_start_col + 3):
-#             if (i != row or j != col) and grid[i][j] == value:
-#                 grid[i][j] = 0  # Eliminate inconsistent value in the 3x3 box
-
-#     grid[row][col] = value  # Preserve the original value at (row, col)
-
-# def find_empty_cell(grid):
-#     for i in range(9):
-#         for j in range(9):
-#             if grid[i][j] == 0:
-#                 return (i, j)
-#     return None
-#########################################################
 
 def is_safe(grid, row, col, num, size):
     return (
