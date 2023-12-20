@@ -47,6 +47,7 @@ class SudokuCSP:
         not self.used_in_col( col, num) and
         not self.used_in_box( row - row % int(self.size**0.5), col - col % int(self.size**0.5), num, self.size)
         )
+
     def select_unassigned_var(self):
         if self._select_unassigned_var is not None:
             return self._select_unassigned_var(self.grid)
@@ -130,9 +131,7 @@ def main():
                 print("---------------------------")
                 print(i['name'] + " " + select_unassigned_var_strategy['name'])
                 print("Solution, Size: ", len(csp.grid))
-                solution = puzzle.solve()
-
-                is_solution_correct = cmp_two_grids(csp.grid, solution.board)
+                is_solution_correct = check_sudoku(csp.grid)
                 print("Is solution correct: ", is_solution_correct)
                 print_grid(csp.grid)
                 print("---------------------------")
@@ -145,11 +144,27 @@ def main():
     # backtrack(cspWithCP)
     # print_grid("answer", cspWithCP.grid)
     return None
-def cmp_two_grids(grid1, grid2):
-    for i in range(len(grid1)):
-        for j in range(len(grid1)):
-            if grid1[i][j] != grid2[i][j]:
+def check_sudoku(grid):
+    n = len(grid)
+    for row in range(n):
+        for col in range(n):
+            # check value is an int and within 1 through n
+            if not isinstance(grid[row][col], int) or not 1 <= grid[row][col] <= n:
                 return False
+
+    # check the rows
+    for row in grid:
+        if sorted(set(row)) != sorted(row):
+            return False
+
+    # check the cols
+    for col in range(n):
+        cols = [row[col] for row in grid]
+        if sorted(set(cols)) != sorted(cols):
+            return False
+
+    # if you get past all the false checks return True
     return True
+   
 if __name__ == "__main__":
     main()
