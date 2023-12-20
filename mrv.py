@@ -9,9 +9,11 @@ def mrv(board):
         for j in range(len(board[i])):
             if board[i][j] == 0: 
                 possible_values = possible_values_grid[i][j]
-                if len(possible_values) < min: 
-                    print(len(possible_values), min, i, j)
+                if  len(possible_values) < min: 
                     min = len(possible_values)
                     min_row = i
                     min_col = j
+    if(board[min_row][min_col] != 0):
+        return None
     return (min_row, min_col)
+

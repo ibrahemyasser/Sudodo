@@ -11,7 +11,7 @@ class SudokuCSP:
     size = 0 # size of the grid
     length = 0 # sqrt(size)
     number_of_steps = 0
-    def __init__(self, grid, select_unassigned_var = None , order_domain_values = None, inference = None):
+    def __init__(self, grid, select_unassigned_var = None , inference = None):
         if not self.is_solvable(grid):
             raise ValueError("Invalid Sudoku Puzzle")
         size = len(grid)
@@ -20,7 +20,6 @@ class SudokuCSP:
         self.length = length
         self.grid = grid
         self._select_unassigned_var = select_unassigned_var
-        self._order_domain_values = order_domain_values
         self._inference = inference
     def is_solvable(self, grid):
         # Check if grid size is solvable, i.e. sqrt(size) is an integer
@@ -58,8 +57,6 @@ class SudokuCSP:
                     return (i, j)
         return None
     def order_domain_values(self):
-        if self._order_domain_values is not None:
-            return self._order_domain_values(self.grid)
         return range(1, self.size + 1)
     # var is a tuple (row, col)
     # return true if incosistency is found otherwise false
@@ -135,7 +132,7 @@ def main():
     # elapsed_time = end_time - start_time
     # print(f"My function took {elapsed_time} seconds to execute.")
 
-    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 3)]
+    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 4)]
     print("Sudoku puzzles with different sizes")
     for i in puzzles:
         print("---------------------------")
@@ -143,7 +140,7 @@ def main():
         print_grid(i)
         print("---------------------------")
     table = PrettyTable()
-    table.field_names = ["ID", "Algorithm", "Size", "Time", "Number of steps"]
+    table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
     select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
     inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":enforce_arc_consistency, "name": "AC-3"}]
     for i in inference_list:
@@ -158,7 +155,8 @@ def main():
                 print("---------------------------")
                 end_time = time.time()
                 elapsed_time = end_time - start_time
-                table.add_row([puzzles.index(j), i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
+                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
+    table.sortby = "Size"
     print(table)
 
     # backtrack(cspWithCP)
