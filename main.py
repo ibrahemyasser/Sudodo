@@ -120,11 +120,13 @@ def main():
 
     table = PrettyTable()
     table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
-    select_unassigned_var_list = [{ "func":mrv, "name": "MRV"}]
-    inference_list = [{ "func":forward_check, "name": "Forward Checking"}]
+    select_unassigned_var_list = [{ "func":mrv, "name": "MRV"}, { "func":None, "name": ""}]
+    inference_list = [{ "func":forward_check, "name": "Forward Checking"}, { "func":None, "name": "Basic Backtracking"}]
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
             for puzzle in puzzles:
+                if(i['func'] is None and select_unassigned_var_strategy['func'] is None and len(puzzle.board) > 4): 
+                    continue
                 csp = SudokuCSP(replace_none_with_zero(copy.deepcopy(puzzle.board)), inference=i['func'], select_unassigned_var=select_unassigned_var_strategy["func"])
                 start_time = time.time()
                 backtrack(csp)
