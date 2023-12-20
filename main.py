@@ -4,12 +4,13 @@ from forward_checking import forward_check
 from sudoku import Sudoku
 from prettytable import PrettyTable
 import copy
-
+from mrv import mrv
 
 
 class SudokuCSP:
     size = 0 # size of the grid
     length = 0 # sqrt(size)
+    number_of_steps = 0
     def __init__(self, grid, select_unassigned_var = None , order_domain_values = None, inference = None):
         if not self.is_solvable(grid):
             raise ValueError("Invalid Sudoku Puzzle")
@@ -30,7 +31,8 @@ class SudokuCSP:
     def get_length(self, grid):
         # return sqrt(size)
          return int(len(grid) ** 0.5)
-
+    def increase_number_of_steps(self):
+        self.number_of_steps += 1
     def used_in_row(self, row, num):
         return num in self.grid[row]
 
@@ -49,7 +51,7 @@ class SudokuCSP:
         )
     def select_unassigned_var(self):
         if self._select_unassigned_var is not None:
-            return self._select_unassigned_var(self)
+            return self._select_unassigned_var(self.grid)
         for i in range(self.size):
             for j in range(self.size):
                 if self.grid[i][j] == 0:
@@ -76,6 +78,7 @@ def backtrack(csp):
         return True
     [row, col] = empty_cell
     for value in csp.order_domain_values():
+        csp.increase_number_of_steps()
         if csp.is_assignment_consistent(row, col, value):
             csp.set_grid_value(row, col, value)
             inferences = csp.inference()
@@ -132,7 +135,7 @@ def main():
     # elapsed_time = end_time - start_time
     # print(f"My function took {elapsed_time} seconds to execute.")
 
-    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 4)]
+    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 3)]
     print("Sudoku puzzles with different sizes")
     for i in puzzles:
         print("---------------------------")
@@ -140,20 +143,22 @@ def main():
         print_grid(i)
         print("---------------------------")
     table = PrettyTable()
-    table.field_names = ["ID", "Algorithm", "Size", "Time"]
-    inference = [{"inference":None, "name": "None"},{ "inference":forward_check, "name": "Forward Checking"}, {"inference":enforce_arc_consistency, "name": "AC-3"}]
-    for i in inference:
-        for j in puzzles:
-            csp = SudokuCSP(copy.deepcopy(j), inference = i['inference'])
-            start_time = time.time()
-            backtrack(csp)
-            print("---------------------------")
-            print("Soulution, Size: ", len(i))
-            print_grid(csp.grid)
-            print("---------------------------")
-            end_time = time.time()
-            elapsed_time = end_time - start_time
-            table.add_row([puzzles.index(j), i['name'], csp.size, elapsed_time])
+    table.field_names = ["ID", "Algorithm", "Size", "Time", "Number of steps"]
+    select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
+    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":enforce_arc_consistency, "name": "AC-3"}]
+    for i in inference_list:
+        for select_unassigned_var_strategy in select_unassigned_var_list:
+            for j in puzzles:
+                csp = SudokuCSP(copy.deepcopy(j), inference=i['func'], select_unassigned_var=select_unassigned_var_strategy["func"])
+                start_time = time.time()
+                backtrack(csp)
+                print("---------------------------")
+                print("Solution, Size: ", len(i))
+                print_grid(csp.grid)
+                print("---------------------------")
+                end_time = time.time()
+                elapsed_time = end_time - start_time
+                table.add_row([puzzles.index(j), i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
     print(table)
 
     # backtrack(cspWithCP)
