@@ -1,4 +1,5 @@
 import time
+from AC import constraint_propagation
 from forward_checking import forward_check
 from sudoku import Sudoku
 from prettytable import PrettyTable
@@ -119,9 +120,9 @@ def main():
     puzzles =[Sudoku(i).difficulty(0.9) for i in range(2, 5)]
 
     table = PrettyTable()
-    table.field_names = [ "Algorithm", "Size", "Time", "Number of steps", "Is solution correct"]
-    select_unassigned_var_list = [{ "func":mrv, "name": "MRV"}, { "func":None, "name": ""}]
-    inference_list = [{ "func":forward_check, "name": "Forward Checking"}, { "func":None, "name": "Basic Backtracking"}]
+    table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
+    select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
+    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":constraint_propagation, "name": "AC-3"}]
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
             for puzzle in puzzles:
