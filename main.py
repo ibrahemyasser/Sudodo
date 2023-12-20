@@ -1,5 +1,5 @@
 import time
-from AC import enforce_arc_consistency
+from AC import constraint_propagation
 from forward_checking import forward_check
 from sudoku import Sudoku
 from prettytable import PrettyTable
@@ -142,7 +142,7 @@ def main():
     table = PrettyTable()
     table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
     select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
-    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":enforce_arc_consistency, "name": "AC-3"}]
+    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":constraint_propagation, "name": "AC-3"}]
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
             for j in puzzles:
