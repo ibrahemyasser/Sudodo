@@ -148,6 +148,11 @@ def main():
     return None
 def check_sudoku(grid):
     n = len(grid)
+    # check for zeros
+    for row in grid:
+        if 0 in row:
+            return False
+    
     for row in range(n):
         for col in range(n):
             # check value is an int and within 1 through n
