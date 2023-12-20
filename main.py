@@ -125,7 +125,7 @@ def main():
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
             for puzzle in puzzles:
-                if(i['func'] is None and select_unassigned_var_strategy['func'] is None and len(puzzle.board) > 4): 
+                if(i['func'] is None and select_unassigned_var_strategy['func'] is None and len(puzzle.board) > 9): 
                     continue
                 csp = SudokuCSP(replace_none_with_zero(copy.deepcopy(puzzle.board)), inference=i['func'], select_unassigned_var=select_unassigned_var_strategy["func"])
                 start_time = time.time()
