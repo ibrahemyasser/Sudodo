@@ -48,6 +48,7 @@ class SudokuCSP:
         not self.used_in_col( col, num) and
         not self.used_in_box( row - row % int(self.size**0.5), col - col % int(self.size**0.5), num, self.size)
         )
+
     def select_unassigned_var(self):
         if self._select_unassigned_var is not None:
             return self._select_unassigned_var(self.grid)
@@ -114,54 +115,59 @@ def replace_none_with_zero(grid):
 
 def main():
 
-    #cspWithMRV = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV)
-    #csmWithMRV_CP = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = enforce_arc_consistency)
-    #cspWithMRV_forward_check = SudokuCSP(sudoku_board9_9, select_unassigned_var = select_unassigned_var_MRV, inference = forward_check)
 
-    # cspWithForwardCheck = SudokuCSP(sudoku_board9_9, inference = forward_check)
-    # print_grid(cspWithForwardCheck.grid)
-    # cspWithCP = SudokuCSP(sudoku_board9_9, inference = enforce_arc_consistency)
-    # Record start time
-    # start_time = time.time()
-    # csp = SudokuCSP(replace_none_with_zero(puzzle.board))
-    # backtrack(csp)
-    # print_grid(csp.grid)
-    # # Record end time
-    # end_time = time.time()
-    # # Calculate elapsed time
-    # elapsed_time = end_time - start_time
-    # print(f"My function took {elapsed_time} seconds to execute.")
 
-    puzzles =[replace_none_with_zero(Sudoku(i).difficulty(0.9).board) for i in range(2, 4)]
-    print("Sudoku puzzles with different sizes")
-    for i in puzzles:
-        print("---------------------------")
-        print("Size: ", len(i))
-        print_grid(i)
-        print("---------------------------")
+    puzzles =[Sudoku(i).difficulty(0.9) for i in range(2, 5)]
+
     table = PrettyTable()
     table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
     select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
     inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":constraint_propagation, "name": "AC-3"}]
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
-            for j in puzzles:
-                csp = SudokuCSP(copy.deepcopy(j), inference=i['func'], select_unassigned_var=select_unassigned_var_strategy["func"])
+            for puzzle in puzzles:
+                if(i['func'] is None and select_unassigned_var_strategy['func'] is None and len(puzzle.board) > 9): 
+                    continue
+                csp = SudokuCSP(replace_none_with_zero(copy.deepcopy(puzzle.board)), inference=i['func'], select_unassigned_var=select_unassigned_var_strategy["func"])
                 start_time = time.time()
                 backtrack(csp)
                 print("---------------------------")
-                print("Solution, Size: ", len(i))
+                print(i['name'] + " " + select_unassigned_var_strategy['name'])
+                print("Solution, Size: ", len(csp.grid))
+                is_solution_correct = check_sudoku(csp.grid)
+                print("Is solution correct: ", is_solution_correct)
                 print_grid(csp.grid)
                 print("---------------------------")
                 end_time = time.time()
                 elapsed_time = end_time - start_time
-                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
+                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps, is_solution_correct])
     table.sortby = "Size"
     print(table)
 
     # backtrack(cspWithCP)
     # print_grid("answer", cspWithCP.grid)
     return None
+def check_sudoku(grid):
+    n = len(grid)
+    for row in range(n):
+        for col in range(n):
+            # check value is an int and within 1 through n
+            if not isinstance(grid[row][col], int) or not 1 <= grid[row][col] <= n:
+                return False
 
+    # check the rows
+    for row in grid:
+        if sorted(set(row)) != sorted(row):
+            return False
+
+    # check the cols
+    for col in range(n):
+        cols = [row[col] for row in grid]
+        if sorted(set(cols)) != sorted(cols):
+            return False
+
+    # if you get past all the false checks return True
+    return True
+   
 if __name__ == "__main__":
     main()
