@@ -1,5 +1,5 @@
 import time
-from AC import constraint_propagation
+from MAC import MAC
 from forward_checking import forward_check
 from sudoku import Sudoku
 from prettytable import PrettyTable
@@ -122,7 +122,7 @@ def main():
     table = PrettyTable()
     table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
     select_unassigned_var_list = [{"func":None, "name": ""},{ "func":mrv, "name": "MRV"}]
-    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":constraint_propagation, "name": "AC-3"}]
+    inference_list = [{"func":None, "name": "basic backtracking"},{ "func":forward_check, "name": "Forward Checking"}, {"func":MAC, "name": "AC-3"}]
     for i in inference_list:
         for select_unassigned_var_strategy in select_unassigned_var_list:
             for puzzle in puzzles:
@@ -140,7 +140,7 @@ def main():
                 print("---------------------------")
                 end_time = time.time()
                 elapsed_time = end_time - start_time
-                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps, is_solution_correct])
+                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
     table.sortby = "Size"
     print(table)
 
