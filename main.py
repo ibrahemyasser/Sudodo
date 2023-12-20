@@ -56,7 +56,7 @@ class SudokuCSP:
         return None
     def order_domain_values(self):
         if self._order_domain_values is not None:
-            return self._order_domain_values(self)
+            return self._order_domain_values(self.grid)
         return range(1, self.size + 1)
     # var is a tuple (row, col)
     # return true if incosistency is found otherwise false
