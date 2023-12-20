@@ -3,6 +3,7 @@ from AC import enforce_arc_consistency
 from forward_checking import forward_check
 from sudoku import Sudoku
 from prettytable import PrettyTable
+import copy
 
 
 
@@ -143,7 +144,7 @@ def main():
     inference = [{"inference":None, "name": "None"},{ "inference":forward_check, "name": "Forward Checking"}, {"inference":enforce_arc_consistency, "name": "AC-3"}]
     for i in inference:
         for j in puzzles:
-            csp = SudokuCSP(j, inference = i['inference'])
+            csp = SudokuCSP(copy.deepcopy(j), inference = i['inference'])
             start_time = time.time()
             backtrack(csp)
             print("---------------------------")
