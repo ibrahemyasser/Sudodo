@@ -119,7 +119,7 @@ def main():
     puzzles =[Sudoku(i).difficulty(0.9) for i in range(2, 5)]
 
     table = PrettyTable()
-    table.field_names = [ "Algorithm", "Size", "Time", "Number of steps"]
+    table.field_names = [ "Algorithm", "Size", "Time", "Number of steps", "Is solution correct"]
     select_unassigned_var_list = [{ "func":mrv, "name": "MRV"}, { "func":None, "name": ""}]
     inference_list = [{ "func":forward_check, "name": "Forward Checking"}, { "func":None, "name": "Basic Backtracking"}]
     for i in inference_list:
@@ -139,7 +139,7 @@ def main():
                 print("---------------------------")
                 end_time = time.time()
                 elapsed_time = end_time - start_time
-                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps])
+                table.add_row([ i['name'] + " " + select_unassigned_var_strategy['name'], csp.size, elapsed_time, csp.number_of_steps, is_solution_correct])
     table.sortby = "Size"
     print(table)
 
